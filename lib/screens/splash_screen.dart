@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/home_bloc/home_bloc.dart';
 import '../utils/app_resource/string_resources.dart';
 import 'dashboard/home_screen.dart';
 
@@ -16,8 +18,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2)).then((value) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => BlocProvider(
+                create: (context) => HomeBloc()..add(GetHomeData()),
+                child: const HomeScreen(),
+              )));
     });
     super.initState();
   }
