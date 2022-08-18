@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../model/home_model.dart';
 import '../model/status_model.dart';
 import '../utils/config.dart';
 import '../utils/string_resources.dart';
@@ -150,5 +151,21 @@ class ApiController {
         break;
     }
     return errorResponse;
+  }
+
+  Future<HomeResponse?> getHomeData(
+      {required Map<String, dynamic> param}) async {
+    try {
+      Response response = await _dio.get(
+        Config.apiEndpoint,
+      );
+      if (response.statusCode == 200) {
+        return HomeResponse.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      throw _handleError(e);
+    }
   }
 }
