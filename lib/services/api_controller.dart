@@ -153,8 +153,8 @@ class ApiController {
     return errorResponse;
   }
 
-  Future<HomeResponse?> getHomeData(
-      {required Map<String, dynamic> param}) async {
+  Future<HomeResponse> getHomeData(
+      {required Map<String, dynamic> param,required String searchString}) async {
     try {
       Response response = await _dio.get(
         Config.apiEndpoint,
@@ -162,7 +162,7 @@ class ApiController {
       if (response.statusCode == 200) {
         return HomeResponse.fromJson(response.data);
       } else {
-        return null;
+        throw Exception();
       }
     } on DioError catch (e) {
       throw _handleError(e);

@@ -7,6 +7,7 @@ class StringRes {
 
   static const String someThingWentWrong =
       'Something went wrong. Please try again later.';
+  static const String noDataFound = "No Data Found";
   static const String cancel = "Cancel";
   static const String connectionTimeout = "Connection Timed Out";
   static const String receiveTimeout = "Received Time out";

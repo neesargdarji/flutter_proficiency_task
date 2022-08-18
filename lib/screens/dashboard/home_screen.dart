@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_proficiency_task/services/api_controller.dart';
 import 'package:flutter_proficiency_task/utils/app_resource/image_resource.dart';
 
 import '../../bloc/home_bloc/home_bloc.dart';
@@ -16,12 +17,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late HomeResponse homeResponse;
-  TextEditingController controller = TextEditingController();
+  late HomeResponse homeResponseResult;
+  String searchString = '';
 
   @override
   void initState() {
-    context.read<HomeBloc>().add(GetHomeData());
+    // context.read<HomeBloc>().add(GetHomeData());
     super.initState();
   }
 
@@ -41,10 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
         if (state is HomeSuccess) {
-          homeResponse = state.homeResponse;
+          homeResponseResult = state.homeResponse;
           return Scaffold(
             appBar: AppBar(
-              title: Text(homeResponse.title.toString()),
+              title: Text(homeResponseResult.title.toString()),
             ),
             body: RefreshIndicator(
               onRefresh: _onRefresh,
@@ -55,8 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 10,
                   ),
                   SearchTextField(
-                    text: StringRes.search,
-                    controller: controller,
+                    text: searchString,
+                    hintText: StringRes.search,
+                    onChanged: searchTitle,
                   ),
                   const SizedBox(
                     height: 10,
@@ -78,9 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: CustomNetworkImage(
                                       placeholderWidget: Image.asset(
                                           ImageRes.placeholderImage),
-                                      imageUrl: homeResponse
-                                          .rows[index].imageHref
-                                          .toString(),
+                                      imageUrl:
+                                      homeResponseResult.rows[index].imageHref.toString(),
                                     ),
                                   ),
                                   const SizedBox(
@@ -92,13 +93,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          homeResponse.rows[index].title ??
+                                          homeResponseResult.rows[index].title ??
                                               StringRes.noTitle,
+                                          style: const TextStyle(fontSize: 15),
                                         ),
                                         Text(
-                                          homeResponse
-                                                  .rows[index].description ??
+                                          homeResponseResult.rows[index].description ??
                                               StringRes.noDescription,
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey.shade600),
                                         )
                                       ],
                                     ),
@@ -107,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      itemCount: homeResponse.rows.length,
+                      itemCount: homeResponseResult.rows.length,
                     ),
                   ),
                 ],
@@ -126,5 +130,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     context.read<HomeBloc>().add(GetHomeData());
+  }
+
+  Future searchTitle(String searchString) async {
+    final homeResponseResult = await ApiController()
+        .getHomeData(param: {}, searchString: searchString);
+
+    if (!mounted) return;
+
+    setState(() {
+      this.searchString = searchString;
+      this.homeResponseResult = homeResponseResult;
+    });
   }
 }

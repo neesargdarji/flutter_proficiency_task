@@ -18,9 +18,8 @@ class HomeSuccess extends HomeState {
   final HomeResponse homeResponse;
 
   const HomeSuccess({required this.homeResponse});
-
   @override
-  List<Object?> get props => [homeResponse];
+  List<Object?> get props => [];
 }
 
 class HomeFailure extends HomeState {
