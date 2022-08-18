@@ -46,67 +46,72 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               title: Text(homeResponse.title.toString()),
             ),
-            body: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                SearchTextField(
-                  text: StringRes.search,
-                  controller: controller,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        margin: const EdgeInsets.only(
-                            left: 10.0, right: 10, top: 5, bottom: 5),
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 70,
-                                  width: 70,
-                                  child: CustomNetworkImage(
-                                    placeholderWidget:
-                                        Image.asset(ImageRes.placeholderImage),
-                                    imageUrl: homeResponse.rows[index].imageHref
-                                        .toString(),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        homeResponse.rows[index].title ??
-                                            StringRes.noTitle,
-                                      ),
-                                      Text(
-                                        homeResponse.rows[index].description ??
-                                            StringRes.noDescription,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ]),
-                        ),
-                      );
-                    },
-                    itemCount: homeResponse.rows.length,
+            body: RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
+                  SearchTextField(
+                    text: StringRes.search,
+                    controller: controller,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          margin: const EdgeInsets.only(
+                              left: 10.0, right: 10, top: 5, bottom: 5),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 70,
+                                    width: 70,
+                                    child: CustomNetworkImage(
+                                      placeholderWidget: Image.asset(
+                                          ImageRes.placeholderImage),
+                                      imageUrl: homeResponse
+                                          .rows[index].imageHref
+                                          .toString(),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          homeResponse.rows[index].title ??
+                                              StringRes.noTitle,
+                                        ),
+                                        Text(
+                                          homeResponse
+                                                  .rows[index].description ??
+                                              StringRes.noDescription,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        );
+                      },
+                      itemCount: homeResponse.rows.length,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -117,5 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  Future<void> _onRefresh() async {
+    context.read<HomeBloc>().add(GetHomeData());
   }
 }
