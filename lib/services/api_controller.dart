@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../model/home_model.dart';
 import '../model/status_model.dart';
 import '../utils/config.dart';
-import '../utils/string_resources.dart';
+import '../utils/app_resource/string_resources.dart';
 
 class ApiController {
   static final ApiController _apiController = ApiController._internal();
