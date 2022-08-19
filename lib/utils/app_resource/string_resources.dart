@@ -3,7 +3,7 @@ import '../app_state.dart';
 AppState appState = AppState();
 
 class StringRes {
-  static const String appName = 'FLUTTER DEMO TASK';
+  static const String appName = 'Flutter Proficiency Task';
 
   static const String someThingWentWrong =
       'Something went wrong. Please try again later.';
