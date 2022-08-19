@@ -154,7 +154,7 @@ class ApiController {
   }
 
   Future<HomeResponse> getHomeData(
-      {required Map<String, dynamic> param,required String searchString}) async {
+      {required Map<String, dynamic> param}) async {
     try {
       Response response = await _dio.get(
         Config.apiEndpoint,

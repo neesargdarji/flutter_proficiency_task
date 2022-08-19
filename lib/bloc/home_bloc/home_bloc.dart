@@ -19,7 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       Map<String, dynamic> param;
       param = {"params": {}};
-      homeResponse = await ApiController().getHomeData(param: param,searchString: '');
+      homeResponse = await ApiController().getHomeData(param: param);
       if(homeResponse.rows.isNotEmpty) {
         emit(HomeSuccess(homeResponse: homeResponse));
       }else{
